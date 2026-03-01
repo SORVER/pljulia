@@ -1,10 +1,10 @@
 # Pl/Julia Development Docker images
 #
 # Arg/Parameters:
-#   BASE_IMAGE_VERSION=postgres:13
-#   JULIA_MAJOR=1.6
-#   JULIA_VERSION=1.6.1
-#   JULIA_SHA256=7c888adec3ea42afbfed2ce756ce1164a570d50fa7506c3f2e1e2cbc49d52506
+#   BASE_IMAGE_VERSION=postgres:14
+#   JULIA_MAJOR=1.12
+#   JULIA_VERSION=1.12.5
+#   JULIA_SHA256=41b84d727e4e96fbf3ed9e92fa195d773d247b9097f73fad688f8b699758bae7
 #   PLJULIA_REGRESSION=YES
 #   PLJULIA_PACKAGES="CpuId,Primes"
 #
@@ -21,6 +21,7 @@
 # - postgres:12             : OK
 # - postgres:13             : OK
 # - postgres:14             : OK
+# - postgres:15             : OK
 # - postgis/postgis:13-3.1  : Should work
 #
 
@@ -30,9 +31,11 @@ FROM $BASE_IMAGE_VERSION as builder
 # add debian mirror - for a faster build
 #ARG APT_MIRROR=cdn-fastly.deb.debian.org
 ARG APT_MIRROR=ftp.de.debian.org
-RUN sed -ri "s/(httpredir|deb).debian.org/${APT_MIRROR:-deb.debian.org}/g" /etc/apt/sources.list \
- && sed -ri "s/(security).debian.org/${APT_MIRROR:-security.debian.org}/g" /etc/apt/sources.list \
- && cat /etc/apt/sources.list
+RUN if [ -f /etc/apt/sources.list ]; then \
+      sed -ri "s/(httpredir|deb).debian.org/${APT_MIRROR:-deb.debian.org}/g" /etc/apt/sources.list \
+   && sed -ri "s/(security).debian.org/${APT_MIRROR:-security.debian.org}/g" /etc/apt/sources.list \
+   && cat /etc/apt/sources.list ; \
+    fi
 
 # Install build dependencies
 RUN    apt-get update \
@@ -45,9 +48,9 @@ RUN    apt-get update \
     && rm -rf /var/lib/apt/lists/* /tmp/*
 
 # Julia Versions:
-ARG JULIA_MAJOR=1.6
-ARG JULIA_VERSION=1.6.3
-ARG JULIA_SHA256=c7459c334cd7c3e4a297baf52535937c6bad640e60882f9201a73bab9394314b
+ARG JULIA_MAJOR=1.12
+ARG JULIA_VERSION=1.12.5
+ARG JULIA_SHA256=41b84d727e4e96fbf3ed9e92fa195d773d247b9097f73fad688f8b699758bae7
 ARG PLJULIA_PACKAGES="CpuId,Primes"
 
 # Install Julia

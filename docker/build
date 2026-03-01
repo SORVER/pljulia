@@ -30,5 +30,21 @@ docker build --pull \
    --build-arg JULIA_SHA256=7c888adec3ea42afbfed2ce756ce1164a570d50fa7506c3f2e1e2cbc49d52506 \
    -t pljulia:pg13-pgis3.1-jl1.6 $DOCKER_DIR
 
+# Julia 1.12.5 + Postgres:14
+docker build --pull \
+   --build-arg BASE_IMAGE_VERSION=postgres:14  \
+   --build-arg JULIA_MAJOR=1.12 \
+   --build-arg JULIA_VERSION=1.12.5 \
+   --build-arg JULIA_SHA256=41b84d727e4e96fbf3ed9e92fa195d773d247b9097f73fad688f8b699758bae7 \
+   -t pljulia:pg14-jl1.12 $DOCKER_DIR
+
+# Julia 1.12.5 + Postgres:15
+docker build --pull \
+   --build-arg BASE_IMAGE_VERSION=postgres:15  \
+   --build-arg JULIA_MAJOR=1.12 \
+   --build-arg JULIA_VERSION=1.12.5 \
+   --build-arg JULIA_SHA256=41b84d727e4e96fbf3ed9e92fa195d773d247b9097f73fad688f8b699758bae7 \
+   -t pljulia:pg15-jl1.12 $DOCKER_DIR
+
 # List docker images
 docker images | grep pljulia
